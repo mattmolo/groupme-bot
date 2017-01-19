@@ -2,7 +2,7 @@ import json
 import time
 import random
 
-from groupmebot import GroupmeBot
+from groupmebot import GroupMeBot
 
 
 # Loads config file, which contains the BOT_ID and Minecraft Server IP for
@@ -10,7 +10,7 @@ from groupmebot import GroupmeBot
 with open('config.json', 'r') as f:
     config = json.load(f)
 
-bot = GroupmeBot(config['BOT_ID'])
+bot = GroupMeBot(config['BOT_ID'])
 
 # A couple commands use random, so set a seed here
 random.seed(time.time())
