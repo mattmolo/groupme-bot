@@ -1,0 +1,2 @@
+giphypop==0.3
+mcstatus==2.1
