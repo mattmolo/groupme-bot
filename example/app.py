@@ -83,7 +83,6 @@ def gif(args):
 Magic 8-ball command:
     /m8 <question> - Ask Magic 8-ball a question
 """
-
 @bot.command("/m8")
 def m8(args):
     """
