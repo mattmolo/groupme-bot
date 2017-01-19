@@ -1,4 +1,4 @@
-# Groupme Bot
+# GroupMe Bot
 A simple GroupMe Bot that starts a HTTP server to handle the bot callbacks. The [GroupMe dev site](https://dev.groupme.com/bots) allows you to create a bot and set your callback.
 
 The GroupMe bot class is made similar to flask, so you can define your commands with decorators. Check the example for an in depth version.
