@@ -4,28 +4,35 @@ import random
 
 from groupmebot import GroupmeBot
 
-random.seed(time.time())
 
-
+# Loads config file, which contains the BOT_ID and Minecraft Server IP for
+# /mcserver command
 with open('config.json', 'r') as f:
     config = json.load(f)
 
-bot = GroupmeBot(config['BOT_ID_DEV'])
+bot = GroupmeBot(config['BOT_ID'])
+
+# A couple commands use random, so set a seed here
+random.seed(time.time())
 
 
 """
 Minecraft Server Status:
-    /mcserver
-    Responds with the players currently online
+    /mcserver - Minecraft Server Status
 """
 from mcstatus import MinecraftServer
 
 @bot.command("/mcserver")
 def mcserver(args):
+    """
+    Uses mcstatus to query the server and respond with the online players
+    """
 
+    # Loads the IP for config file, var is MC_SERVER
     mcserver = MinecraftServer.lookup(config['MC_SERVER'])
     query = mcserver.query()
 
+    # Sassy responses when no one is on
     if query.players.online == 0:
         responses = [
             "No one is playing :(",
@@ -55,51 +62,55 @@ def mcserver(args):
 
 """
 GIF Command:
-    /gif <phrase>
-    Searches giphy for phrase
+    /gif <phrase> - Search GIPHY for phrase
 """
 from giphypop import translate
 
 @bot.command("/gif")
 def gif(args):
+    """
+    Uses GIPHY API and 'translates' the phrase to a gif
+    """
 
     # combine args in single phrase and search giphy
     img = translate(phrase=" ".join(args))
 
     if img:
         bot.post(img.fixed_height.url)
-        bot.post("Powered by GIPHY")
 
 
 """
 Magic 8-ball command:
-    /m8 <phrase>
-    responds like a magic 8-ball
+    /m8 <question> - Ask Magic 8-ball a question
 """
 
 @bot.command("/m8")
 def m8(args):
+    """
+    Magic 8-ball, randomly choose a response
+    """
+
     responses = [
-        "it is certain.",
-        "it is decidedly so.",
-        "without a doubt.",
-        "yes, definitely.",
-        "you may rely on it.",
-        "as i see it, yes.",
-        "most likely.",
-        "outlook good.",
-        "yes.",
-        "signs point to yes.",
-        "reply hazy try again.",
-        "ask again later.",
-        "better not tell you now.",
-        "cannot predict now.",
-        "concentrate and ask again.",
-        "don't count on it.",
-        "my reply is no.",
-        "my sources say no.",
-        "outlook not so good.",
-        "very doubtful."
+        "It is certain.",
+        "It is decidedly so.",
+        "Without a doubt.",
+        "Yes, definitely.",
+        "You may rely on it.",
+        "As I see it, yes.",
+        "Most likely.",
+        "Outlook good.",
+        "Yes.",
+        "Signs point to yes.",
+        "Reply hazy try again.",
+        "Ask again later.",
+        "Better not tell you now.",
+        "Cannot predict now.",
+        "Concentrate and ask again.",
+        "Don't count on it.",
+        "My reply is no.",
+        "My sources say no.",
+        "Outlook not so good.",
+        "Very doubtful."
     ]
     response_text = random.choice(responses)
     bot.post(response_text)
@@ -107,33 +118,41 @@ def m8(args):
 
 """
 Roll command:
-    /roll <number>
-    Roll a dice. Defaults to 6-sided
+    /roll <number> - Roll a dice. Defaults to 6-sided
 """
 @bot.command("/roll")
 def roll(args):
+    """
+    Roll a dice, inspired by Google Hangouts. Optional argument to specify how
+    many sides.
+    """
 
     dice = 6
 
+    # Attempt to parse if any arguments
     if args:
         try:
             dice = int(args[0])
         except Exception:
             dice = 6
 
-    response_text = "You rolled a {}".format(random.randint(1, dice))
+    response_text = "You rolled a %d" % random.randint(1, dice)
     bot.post(response_text)
 
 
 """
 Help Command:
-    /help
-    Responds with list of commands
+    /help - Show this help thing
 """
 @bot.command("/help")
 def help(args):
+    """
+    Responds with a list of commands
+    """
+
+    # List of commands. Joined by a newline and then posted
     commands = [
-        "/mcstatus - Minecraft Server Status",
+        "/mcserver - Minecraft Server Status",
         "/gif <phrase> - Search GIPHY for phrase",
         "/m8 <question> - Ask Magic 8-ball a question",
         "/roll <number> - Roll a dice. Defaults to 6-sided",
