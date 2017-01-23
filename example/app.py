@@ -157,7 +157,7 @@ def help(args):
         "/roll <number> - Roll a dice. Defaults to 6-sided",
         "/help - Show this help thing"
     ]
-    bot.post("\n".join(commands))
+    bot.post("Here are the available commands:\n" + "\n".join(commands))
 
 
 if __name__ == "__main__":
